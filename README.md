@@ -5,5 +5,5 @@ Extra utilities for Doctrine: DBAL types, ORM helpers (entity handler, queries, 
 ## Installation
 
 ```bash
-composer require codraw/
+composer require codraw/doctrine-extra
 ```
