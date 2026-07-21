@@ -32,12 +32,20 @@ class EntityHandler
 
     public function persist(object $object): void
     {
-        $this->getManagerForClass($object::class)->persist($object);
+        $manager = $this->getManagerForClass($object::class)
+            ?? throw new \InvalidArgumentException(\sprintf('No entity manager found for class [%s].', $object::class));
+
+        $manager->persist($object);
     }
 
     public function flush(?string $class = null): void
     {
-        ($class ? $this->getManagerForClass($class) : $this->managerRegistry->getManager())->flush();
+        $manager = $class
+            ? $this->getManagerForClass($class)
+                ?? throw new \InvalidArgumentException(\sprintf('No entity manager found for class [%s].', $class))
+            : $this->managerRegistry->getManager();
+
+        $manager->flush();
     }
 
     public function find(string $class, $id)

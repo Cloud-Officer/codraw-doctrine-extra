@@ -137,13 +137,15 @@ class GraphGenerator
 
     private function createTableLabel(Table $table): string
     {
+        $tableName = htmlspecialchars($table->getObjectName()->toString());
+
         // Start the table
         $label = <<<TABLE
             <
             <table cellspacing="0" border="1" align="left">
             <tr>
             <td border="1" colspan="3" align="center" bgcolor="#fcaf3e">
-            <font color="#2e3436" face="Helvetica">{$table->getObjectName()->toString()}</font>
+            <font color="#2e3436" face="Helvetica">{$tableName}</font>
             </td></tr>
             TABLE;
 
@@ -154,7 +156,8 @@ class GraphGenerator
         );
         foreach ($table->getColumns() as $column) {
             $columnName = $column->getObjectName()->toString();
-            $type = strtolower(Type::getTypeRegistry()->lookupName($column->getType()));
+            $escapedColumnName = htmlspecialchars($columnName);
+            $type = htmlspecialchars(strtolower(Type::getTypeRegistry()->lookupName($column->getType())));
             $primaryKeyMarker = \in_array($columnName, $primaryKeyColumnNames, true)
                 ? "\xe2\x9c\xb7"
                 : '';
@@ -162,7 +165,7 @@ class GraphGenerator
             $label .= <<<TABLE
                 <tr>
                 <td border="0" align="left" bgcolor="#eeeeec">
-                <font color="#2e3436" face="Helvetica">{$columnName}</font>
+                <font color="#2e3436" face="Helvetica">{$escapedColumnName}</font>
                 </td>
                 <td border="0" align="left" bgcolor="#eeeeec">
                 <font color="#2e3436" face="Helvetica">{$type}</font>

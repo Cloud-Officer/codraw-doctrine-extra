@@ -1,12 +1,13 @@
 {
     "name": "codraw/doctrine-extra",
-    "description": "Log related tool, mainly for monolog",
+    "description": "Extra utilities for Doctrine: DBAL types, ORM helpers, graph schema generation and console commands",
     "license": "MIT",
     "type": "library",
     "keywords": [
         "draw",
-        "log",
-        "monolog"
+        "doctrine",
+        "orm",
+        "dbal"
     ],
     "authors": [
         {
@@ -15,18 +16,25 @@
         }
     ],
     "require": {
-        "php": ">=8.5"
+        "php": "^8.5",
+        "doctrine/collections": "^2.2",
+        "doctrine/dbal": "^4.4",
+        "doctrine/orm": "^3.6",
+        "doctrine/persistence": "^2.2 || ^3.0",
+        "psr/event-dispatcher": "^1.0",
+        "symfony/console": "^6.4.0",
+        "symfony/process": "^6.4.0"
     },
     "require-dev": {
-        "doctrine/orm": "^3.6",
-        "doctrine/dbal": "^4.4",
-        "doctrine/collections": "^2.2",
         "doctrine/data-fixtures": "^2.0",
         "codraw/dependency-injection": "^0.39",
         "codraw/graphviz": "^0.39",
         "phpunit/phpunit": "^11.3 || ^12.0"
     },
     "suggest": {
+        "doctrine/data-fixtures": "To use the ObjectReferenceTrait in your data fixtures",
+        "doctrine/mongodb-odm": "To enable the MongoDB ODM related services",
+        "codraw/framework-extra-bundle": "To integrate in Symfony",
         "codraw/graphviz": "To generate graph of the database schema"
     },
     "minimum-stability": "dev",

@@ -38,8 +38,8 @@ class CommentSqlWalker extends SqlWalker
     private function getQueryWithCalleeComment(string $query): string
     {
         $result = '';
-        foreach ($this->getQuery()->getHint('comment_sql_walker.comments') as $comment) {
-            $result .= '-- '.$comment.\PHP_EOL;
+        foreach ($this->getQuery()->getHint('comment_sql_walker.comments') ?: [] as $comment) {
+            $result .= '-- '.str_replace(["\r", "\n"], ' ', $comment).\PHP_EOL;
         }
 
         return $result.$query;

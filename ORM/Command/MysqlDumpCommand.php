@@ -29,18 +29,20 @@ class MysqlDumpCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $connectionParameter = $this->ormManagerRegistry->getConnection($input->getOption('connection'))
-            ->getParams()['primary']
+            ->getParams()
         ;
+
+        $connectionParameter = $connectionParameter['primary'] ?? $connectionParameter;
 
         Process::fromShellCommandline(
             \sprintf(
                 'mysqldump -h %s -P %s -u %s %s %s > %s',
-                $connectionParameter['host'],
-                $connectionParameter['port'],
-                $connectionParameter['user'],
-                empty($connectionParameter['password']) ? '' : '-p'.$connectionParameter['password'],
-                $connectionParameter['dbname'],
-                $input->getArgument('file'),
+                escapeshellarg($connectionParameter['host']),
+                escapeshellarg((string) ($connectionParameter['port'] ?? 3306)),
+                escapeshellarg($connectionParameter['user']),
+                empty($connectionParameter['password']) ? '' : '-p'.escapeshellarg($connectionParameter['password']),
+                escapeshellarg($connectionParameter['dbname']),
+                escapeshellarg($input->getArgument('file')),
             ),
             timeout: 600
         )->mustRun();

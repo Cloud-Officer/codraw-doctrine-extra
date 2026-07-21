@@ -30,19 +30,21 @@ class MysqlImportFileCommand extends Command
     {
         $connectionParameter = $this->ormManagerRegistry
             ->getConnection($input->getOption('connection'))
-            ->getParams()['primary']
+            ->getParams()
         ;
+
+        $connectionParameter = $connectionParameter['primary'] ?? $connectionParameter;
 
         foreach ($input->getArgument('files') as $file) {
             Process::fromShellCommandline(
                 \sprintf(
                     'mysql -h %s -P %s -u %s %s %s < %s',
-                    $connectionParameter['host'],
-                    $connectionParameter['port'],
-                    $connectionParameter['user'],
-                    empty($connectionParameter['password']) ? '' : '-p'.$connectionParameter['password'],
-                    $connectionParameter['dbname'],
-                    $file
+                    escapeshellarg($connectionParameter['host']),
+                    escapeshellarg((string) ($connectionParameter['port'] ?? 3306)),
+                    escapeshellarg($connectionParameter['user']),
+                    empty($connectionParameter['password']) ? '' : '-p'.escapeshellarg($connectionParameter['password']),
+                    escapeshellarg($connectionParameter['dbname']),
+                    escapeshellarg($file)
                 ),
                 timeout: 600
             )->mustRun();
